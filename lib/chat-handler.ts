@@ -111,7 +111,7 @@ export async function handleMessage(event: messagingApi.MessageEvent) {
                 { type: "action", action: { type: "message", label: "📋 List", text: "/list" } },
                 {
                   type: "action",
-                  action: { type: "uri", label: "📊 Dashboard", uri: `${APP_URL}/dashboard` },
+                  action: { type: "uri", label: "📊 Dashboard", uri: `${APP_URL}/dashboard?uid=${lineUserId}` },
                 },
               ],
             },
@@ -123,6 +123,7 @@ export async function handleMessage(event: messagingApi.MessageEvent) {
 
 // /add command — send the LIFF add form link
 async function handleAdd(event: messagingApi.MessageEvent) {
+  const lineUserId = event.source.userId!;
   await lineClient.replyMessage({
     replyToken: event.replyToken,
     messages: [
@@ -139,7 +140,7 @@ async function handleAdd(event: messagingApi.MessageEvent) {
               action: {
                 type: "uri",
                 label: "📋 Open Add Form",
-                uri: `${APP_URL}/dashboard?action=add`,
+                uri: `${APP_URL}/dashboard?uid=${lineUserId}&action=add`,
               },
             },
           ],
