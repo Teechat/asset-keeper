@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { AssetWithReminder } from "@/lib/database.types";
-import { CATEGORY_EMOJI } from "@/lib/line";
+import { CATEGORY_EMOJI } from "@/lib/constants";
 import { useLang } from "@/lib/lang-context";
 import { translations } from "@/lib/i18n";
 
