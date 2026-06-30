@@ -37,6 +37,16 @@ export default function Dashboard() {
   // Initialize LIFF
   useEffect(() => {
     async function initLiff() {
+      // Check URL param first — bot sends ?uid= to bypass LIFF auth
+      const params = new URLSearchParams(window.location.search);
+      const uid = params.get("uid");
+      if (uid) {
+        setLineUserId(uid);
+        setLiffReady(true);
+        setLoading(false);
+        return;
+      }
+
       try {
         // @ts-expect-error - liff is loaded from CDN
         const liff = window.liff;
@@ -59,10 +69,6 @@ export default function Dashboard() {
         setLiffReady(true);
       } catch (err) {
         console.error("LIFF init error:", err);
-        // Fallback: use uid from URL param (set by bot when sending dashboard link)
-        const params = new URLSearchParams(window.location.search);
-        const uid = params.get("uid");
-        if (uid) setLineUserId(uid);
         setLiffReady(true);
         setLoading(false);
       }
