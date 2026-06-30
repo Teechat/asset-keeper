@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { AssetWithReminder } from "@/lib/database.types";
 import { CATEGORY_EMOJI } from "@/lib/constants";
 import { useLang } from "@/lib/lang-context";
-import { translations } from "@/lib/i18n";
+import { translations, CATEGORY_NAMES } from "@/lib/i18n";
 
 interface Props {
   asset: AssetWithReminder;
@@ -129,7 +129,7 @@ export default function AssetCard({ asset, onRefresh, lineUserId, showAll }: Pro
             <div className="min-w-0">
               <p className="font-semibold text-gray-900 truncate">{asset.name}</p>
               <p className="text-xs text-gray-400">
-                {asset.category}
+                {CATEGORY_NAMES[lang][asset.category] ?? asset.category}
                 {asset.item_name && (
                   <span className="text-gray-600 font-medium"> · {asset.item_name}</span>
                 )}
