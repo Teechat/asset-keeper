@@ -12,6 +12,22 @@ export async function PATCH(
   const { id } = await params;
   const body = await req.json();
 
+  if (body.action === "update") {
+    if (body.notes !== undefined) {
+      await supabaseAdmin
+        .from("assets")
+        .update({ notes: body.notes ?? null, updated_at: new Date().toISOString() })
+        .eq("id", id);
+    }
+    if (body.reminderId && body.dueDate) {
+      await supabaseAdmin
+        .from("reminders")
+        .update({ due_date: body.dueDate })
+        .eq("id", body.reminderId);
+    }
+    return NextResponse.json({ ok: true });
+  }
+
   if (body.action === "done" && body.reminderId) {
     const { data: reminder, error: fetchErr } = await supabaseAdmin
       .from("reminders")
