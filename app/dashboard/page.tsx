@@ -41,7 +41,16 @@ export default function Dashboard() {
       const params = new URLSearchParams(window.location.search);
       const uid = params.get("uid");
       if (uid) {
+        localStorage.setItem("ak_uid", uid);
         setLineUserId(uid);
+        setLiffReady(true);
+        setLoading(false);
+        return;
+      }
+
+      const savedUid = localStorage.getItem("ak_uid");
+      if (savedUid) {
+        setLineUserId(savedUid);
         setLiffReady(true);
         setLoading(false);
         return;
