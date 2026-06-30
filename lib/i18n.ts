@@ -54,7 +54,7 @@ export const translations = {
         "custom-6-months": "Every 6 months",
         yearly: "Every year",
         "custom-2-years": "Every 2 years",
-      } as Record<string, string>,
+      },
     },
     noAuth: {
       msg: "Open this page from LINE to access your dashboard.",
@@ -116,7 +116,7 @@ export const translations = {
         "custom-6-months": "ทุก 6 เดือน",
         yearly: "ทุกปี",
         "custom-2-years": "ทุก 2 ปี",
-      } as Record<string, string>,
+      },
     },
     noAuth: {
       msg: "เปิดหน้านี้จาก LINE เพื่อเข้าถึงแดชบอร์ดของคุณ",
@@ -124,4 +124,4 @@ export const translations = {
     },
     loading: "กำลังโหลด AssetKeeper…",
   },
-} as const satisfies Record<Lang, unknown>;
+} as const;
