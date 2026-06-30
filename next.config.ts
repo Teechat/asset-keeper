@@ -1,16 +1,32 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Prevent @line/bot-sdk (which uses node: URIs) from being bundled by webpack
-  serverExternalPackages: ["@line/bot-sdk"],
-
-  // Skip TypeScript type errors during build (doesn't affect runtime behaviour)
   typescript: { ignoreBuildErrors: true },
-
-  // Skip ESLint errors during build
   eslint: { ignoreDuringBuilds: true },
 
-  // Allow LIFF SDK to be loaded from LINE's CDN
+  webpack(config, { isServer }) {
+    const nodeBuiltins = [
+      "buffer", "stream", "crypto", "path", "os", "fs", "net", "tls",
+      "events", "util", "url", "http", "https", "zlib", "assert",
+      "querystring", "process", "string_decoder",
+    ];
+    for (const mod of nodeBuiltins) {
+      config.resolve.alias = { ...config.resolve.alias, [`node:${mod}`]: mod };
+    }
+
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        buffer: false, stream: false, crypto: false,
+        net: false, tls: false, fs: false, os: false,
+        path: false, http: false, https: false, zlib: false,
+        string_decoder: false, assert: false, querystring: false,
+      };
+    }
+
+    return config;
+  },
+
   async headers() {
     return [
       {
