@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
     for (const mod of nodeBuiltins) {
       config.resolve.alias = { ...config.resolve.alias, [`node:${mod}`]: mod };
     }
-
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -23,7 +22,6 @@ const nextConfig: NextConfig = {
         string_decoder: false, assert: false, querystring: false,
       };
     }
-
     return config;
   },
 
