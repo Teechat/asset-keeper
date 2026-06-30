@@ -125,3 +125,44 @@ export const translations = {
     loading: "กำลังโหลด AssetKeeper…",
   },
 } as const;
+
+export const CATEGORY_LABELS: Record<Lang, Record<string, string>> = {
+  en: {
+    Car: "🚗 Car",
+    Home: "🏠 Home",
+    Health: "💊 Health",
+    Finance: "💰 Finance",
+    Insurance: "🛡️ Insurance",
+    Custom: "✏️ Custom",
+  },
+  th: {
+    Car: "🚗 รถยนต์",
+    Home: "🏠 บ้าน/คอนโด",
+    Health: "💊 สุขภาพ",
+    Finance: "💰 การเงิน",
+    Insurance: "🛡️ ประกัน",
+    Custom: "✏️ กำหนดเอง",
+  },
+};
+
+export const CATEGORY_NAMES: Record<Lang, Record<string, string>> = {
+  en: { Car: "Car", Home: "Home", Health: "Health", Finance: "Finance", Insurance: "Insurance" },
+  th: { Car: "รถยนต์", Home: "บ้าน/คอนโด", Health: "สุขภาพ", Finance: "การเงิน", Insurance: "ประกัน" },
+};
+
+export const SUBCATEGORIES: Record<Lang, Record<string, string[]>> = {
+  en: {
+    Car: ["Tyre change", "Oil change", "Car service", "Car insurance", "Car tax", "Battery", "Brake pads", "Air filter", "Car wash"],
+    Home: ["AC cleaning", "Water heater", "Home insurance", "Pest control", "Plumbing check", "Electrical check", "Garden / lawn", "Roof inspection"],
+    Health: ["Annual check-up", "Dental check-up", "Eye check-up", "Vaccination", "Prescription refill", "Blood test", "Physiotherapy"],
+    Finance: ["Insurance premium", "Loan payment", "Subscription renewal", "Tax filing", "Investment review", "Credit card fee"],
+    Insurance: ["Car insurance", "Home insurance", "Health insurance", "Life insurance", "Travel insurance", "Flood insurance"],
+  },
+  th: {
+    Car: ["เปลี่ยนยาง", "เปลี่ยนน้ำมัน", "บริการรถยนต์", "ประกันรถ", "ภาษีรถ", "แบตเตอรี่", "ผ้าเบรก", "ไส้กรองอากาศ", "ล้างรถ"],
+    Home: ["ล้างแอร์", "เครื่องทำน้ำอุ่น", "ประกันบ้าน", "กำจัดแมลง", "ตรวจระบบประปา", "ตรวจระบบไฟฟ้า", "สวน/สนาม", "ตรวจหลังคา"],
+    Health: ["ตรวจสุขภาพประจำปี", "ตรวจฟัน", "ตรวจตา", "ฉีดวัคซีน", "รับยาประจำ", "ตรวจเลือด", "กายภาพบำบัด"],
+    Finance: ["ค่าเบี้ยประกัน", "ชำระเงินกู้", "ต่ออายุสมาชิก", "ยื่นภาษี", "ทบทวนการลงทุน", "ค่าธรรมเนียมบัตรเครดิต"],
+    Insurance: ["ประกันรถ", "ประกันบ้าน", "ประกันสุขภาพ", "ประกันชีวิต", "ประกันเดินทาง", "ประกันน้ำท่วม"],
+  },
+};
