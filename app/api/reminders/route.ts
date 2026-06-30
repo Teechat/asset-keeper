@@ -6,7 +6,10 @@ import { runReminderCheck, runMonthlySummary } from "@/lib/reminder-scheduler";
 // - mode=check    → daily at 08:00 (7-day and 1-day advance notices only)
 
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get("secret");
+  const querySecret = req.nextUrl.searchParams.get("secret");
+  const authHeader = req.headers.get("authorization");
+  const bearerSecret = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  const secret = querySecret ?? bearerSecret;
   if (secret !== process.env.CRON_SECRET) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
