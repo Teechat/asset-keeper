@@ -270,6 +270,7 @@ async function handleToday(event: messagingApi.MessageEvent, lineUserId: string)
 
 // /dashboard command — send LIFF link
 async function handleDashboard(event: messagingApi.MessageEvent) {
+  const lineUserId = event.source.userId!;
   await lineClient.replyMessage({
     replyToken: event.replyToken,
     messages: [
@@ -283,7 +284,7 @@ async function handleDashboard(event: messagingApi.MessageEvent) {
               action: {
                 type: "uri",
                 label: "Open Dashboard",
-                uri: `${APP_URL}/dashboard`,
+                uri: `${APP_URL}/dashboard?uid=${lineUserId}`,
               },
             },
           ],
