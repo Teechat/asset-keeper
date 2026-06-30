@@ -52,7 +52,8 @@ function getCategoryEmoji(category: string): string {
 // Build a Flex Message card for a single asset reminder
 function buildAssetBubble(
   asset: AssetWithReminder,
-  reminder: AssetWithReminder["reminders"][0]
+  reminder: AssetWithReminder["reminders"][0],
+  lineUserId: string
 ): FlexBubble {
   const daysUntil = getDaysUntilDue(reminder.due_date);
   const urgencyColor =
@@ -146,7 +147,7 @@ function buildAssetBubble(
           action: {
             type: "uri",
             label: "✏️ Edit",
-            uri: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?edit=${asset.id}`,
+            uri: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?uid=${lineUserId}&edit=${asset.id}`,
           },
           style: "secondary",
           height: "sm",
@@ -169,7 +170,7 @@ export async function pushReminders(
   for (const asset of assets) {
     for (const reminder of asset.reminders) {
       if (!reminder.is_completed) {
-        bubbles.push(buildAssetBubble(asset, reminder));
+        bubbles.push(buildAssetBubble(asset, reminder, lineUserId));
       }
     }
   }
