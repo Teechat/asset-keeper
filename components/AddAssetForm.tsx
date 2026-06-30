@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Asset } from "@/lib/database.types";
 import { useLang } from "@/lib/lang-context";
-import { translations } from "@/lib/i18n";
+import { translations, CATEGORY_LABELS, SUBCATEGORIES } from "@/lib/i18n";
 
 interface Props {
   lineUserId: string;
@@ -19,22 +19,7 @@ const ITEM_PLACEHOLDERS: Record<string, string> = {
   Insurance: "e.g. Toyota Camry, Bangkok Condo",
 };
 
-const CATEGORY_MAP: Record<string, string[]> = {
-  Car: ["Tyre change", "Oil change", "Car service", "Car insurance", "Car tax", "Battery", "Brake pads", "Air filter", "Car wash"],
-  Home: ["AC cleaning", "Water heater", "Home insurance", "Pest control", "Plumbing check", "Electrical check", "Garden / lawn", "Roof inspection"],
-  Health: ["Annual check-up", "Dental check-up", "Eye check-up", "Vaccination", "Prescription refill", "Blood test", "Physiotherapy"],
-  Finance: ["Insurance premium", "Loan payment", "Subscription renewal", "Tax filing", "Investment review", "Credit card fee"],
-  Insurance: ["Car insurance", "Home insurance", "Health insurance", "Life insurance", "Travel insurance", "Flood insurance"],
-};
-
-const CATEGORIES = [
-  { label: "🚗 Car", value: "Car" },
-  { label: "🏠 Home", value: "Home" },
-  { label: "💊 Health", value: "Health" },
-  { label: "💰 Finance", value: "Finance" },
-  { label: "🛡️ Insurance", value: "Insurance" },
-  { label: "✏️ Custom", value: "" },
-];
+const CATEGORY_KEYS = ["Car", "Home", "Health", "Finance", "Insurance", ""];
 
 const RECURRENCE_VALUES = ["none", "monthly", "custom-3-months", "custom-6-months", "yearly", "custom-2-years"];
 
@@ -66,7 +51,7 @@ export default function AddAssetForm({ lineUserId, existingAssets = [], onSucces
 
   const isCustomCategory = category === "";
   const isCustomSubcat = subcategory === "__custom__";
-  const subcats = CATEGORY_MAP[category] ?? [];
+  const subcats = SUBCATEGORIES[lang][category] ?? [];
 
   const existingItems = Array.from(
     new Set(
@@ -152,12 +137,12 @@ export default function AddAssetForm({ lineUserId, existingAssets = [], onSucces
           <span className="text-[#06C755] font-bold mr-1">1</span> {tf.step1}
         </label>
         <div className="grid grid-cols-3 gap-2">
-          {CATEGORIES.map((cat) => (
-            <button key={cat.label} type="button" onClick={() => handleCategoryChange(cat.value)}
+          {CATEGORY_KEYS.map((value) => (
+            <button key={value || "custom"} type="button" onClick={() => handleCategoryChange(value)}
               className={`py-2 px-3 rounded-lg text-sm font-medium border transition-colors ${
-                category === cat.value ? "bg-[#06C755] text-white border-[#06C755]" : "bg-white text-gray-700 border-gray-200"
+                category === value ? "bg-[#06C755] text-white border-[#06C755]" : "bg-white text-gray-700 border-gray-200"
               }`}>
-              {cat.label}
+              {CATEGORY_LABELS[lang][value || "Custom"]}
             </button>
           ))}
         </div>
