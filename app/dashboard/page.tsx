@@ -5,7 +5,7 @@ import type { AssetWithReminder } from "@/lib/database.types";
 import AssetCard from "@/components/AssetCard";
 import AddAssetForm from "@/components/AddAssetForm";
 import { LangContext } from "@/lib/lang-context";
-import { translations, type Lang } from "@/lib/i18n";
+import { translations, CATEGORY_NAMES, type Lang } from "@/lib/i18n";
 
 const LIFF_ID = process.env.NEXT_PUBLIC_LIFF_ID!;
 
@@ -254,9 +254,10 @@ export default function Dashboard() {
                 (() => {
                   const groups = new Map<string, typeof sortedAssets>();
                   for (const asset of sortedAssets) {
+                    const catDisplay = CATEGORY_NAMES[lang][asset.category] ?? asset.category;
                     const key = asset.item_name
-                      ? `${asset.category} · ${asset.item_name}`
-                      : asset.category;
+                      ? `${catDisplay} · ${asset.item_name}`
+                      : catDisplay;
                     if (!groups.has(key)) groups.set(key, []);
                     groups.get(key)!.push(asset);
                   }
