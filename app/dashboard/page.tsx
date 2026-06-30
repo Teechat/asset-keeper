@@ -59,6 +59,10 @@ export default function Dashboard() {
         setLiffReady(true);
       } catch (err) {
         console.error("LIFF init error:", err);
+        // Fallback: use uid from URL param (set by bot when sending dashboard link)
+        const params = new URLSearchParams(window.location.search);
+        const uid = params.get("uid");
+        if (uid) setLineUserId(uid);
         setLiffReady(true);
         setLoading(false);
       }
