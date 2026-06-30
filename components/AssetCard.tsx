@@ -31,6 +31,10 @@ function formatDate(str: string): string {
 export default function AssetCard({ asset, onRefresh, lineUserId, showAll }: Props) {
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editDueDate, setEditDueDate] = useState("");
+  const [editNotes, setEditNotes] = useState("");
+  const [saving, setSaving] = useState(false);
   const lang = useLang();
   const tc = translations[lang].card;
 
@@ -75,6 +79,30 @@ export default function AssetCard({ asset, onRefresh, lineUserId, showAll }: Pro
     }
     setDeleting(true);
     await fetch(`/api/assets/${asset.id}`, { method: "DELETE" });
+    onRefresh();
+  }
+
+  function startEdit() {
+    setEditDueDate(nextReminder?.due_date ?? "");
+    setEditNotes(asset.notes ?? "");
+    setEditing(true);
+    setConfirmDelete(false);
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    await fetch(`/api/assets/${asset.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "update",
+        notes: editNotes,
+        reminderId: nextReminder?.id,
+        dueDate: editDueDate,
+      }),
+    });
+    setSaving(false);
+    setEditing(false);
     onRefresh();
   }
 
@@ -138,36 +166,86 @@ export default function AssetCard({ asset, onRefresh, lineUserId, showAll }: Pro
           </p>
         )}
 
+        {/* Inline edit form */}
+        {editing && (
+          <div className="mt-3 space-y-2 border-t pt-3">
+            {nextReminder && (
+              <div>
+                <label className="text-xs text-gray-500 font-medium block mb-1">Due date</label>
+                <input
+                  type="date"
+                  value={editDueDate}
+                  onChange={(e) => setEditDueDate(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#06C755]"
+                />
+              </div>
+            )}
+            <div>
+              <label className="text-xs text-gray-500 font-medium block mb-1">Notes</label>
+              <textarea
+                value={editNotes}
+                onChange={(e) => setEditNotes(e.target.value)}
+                rows={2}
+                placeholder="Optional notes…"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#06C755] resize-none"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex-1 bg-[#06C755] text-white text-sm font-medium py-2 rounded-lg disabled:opacity-60"
+              >
+                {saving ? "…" : "Save"}
+              </button>
+              <button
+                onClick={() => setEditing(false)}
+                className="px-4 py-2 rounded-lg text-sm bg-gray-100 text-gray-500"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Actions */}
-        <div className="mt-3 flex gap-2">
-          {nextReminder && (
+        {!editing && (
+          <div className="mt-3 flex gap-2">
+            {nextReminder && (
+              <button
+                onClick={() => handleMarkDone(nextReminder.id)}
+                className="flex-1 bg-[#06C755] text-white text-sm font-medium py-2 rounded-lg"
+              >
+                {tc.markDone}
+              </button>
+            )}
             <button
-              onClick={() => handleMarkDone(nextReminder.id)}
-              className="flex-1 bg-[#06C755] text-white text-sm font-medium py-2 rounded-lg"
+              onClick={startEdit}
+              className="px-3 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-500"
             >
-              {tc.markDone}
+              ✏️
             </button>
-          )}
-          <button
-            onClick={handleDelete}
-            disabled={deleting}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              confirmDelete
-                ? "bg-red-500 text-white"
-                : "bg-gray-100 text-gray-500"
-            }`}
-          >
-            {deleting ? "…" : confirmDelete ? tc.confirm : "🗑️"}
-          </button>
-          {confirmDelete && (
             <button
-              onClick={() => setConfirmDelete(false)}
-              className="px-3 py-2 rounded-lg text-sm bg-gray-100 text-gray-500"
+              onClick={handleDelete}
+              disabled={deleting}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                confirmDelete
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-100 text-gray-500"
+              }`}
             >
-              {tc.cancel}
+              {deleting ? "…" : confirmDelete ? tc.confirm : "🗑️"}
             </button>
-          )}
-        </div>
+            {confirmDelete && (
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="px-3 py-2 rounded-lg text-sm bg-gray-100 text-gray-500"
+              >
+                {tc.cancel}
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
